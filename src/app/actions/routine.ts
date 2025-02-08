@@ -1,5 +1,5 @@
 import { db } from "@/lib/db";
-import { dayExercises, routines, workoutDays } from "@/lib/db/schema";
+import { routines } from "@/lib/db/schema";
 import { and, desc, eq } from "drizzle-orm";
 import {
   deleteExercises,

@@ -3,14 +3,11 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { SelectExercises } from "@/lib/db/schema/exercises";
-import {
-  recordSetProgress,
-  updateExerciseProgress,
-} from "@/lib/workoutActions";
+import { SelectDayExercises } from "@/lib/db/schema/day-exercises";
+import { recordSetProgress, updateExerciseProgress } from "../actions/progress";
 
 type ExerciseTrackingProps = {
-  exercise: SelectExercises;
+  exercise: SelectDayExercises;
 };
 
 export function ExerciseTracking({ exercise }: ExerciseTrackingProps) {

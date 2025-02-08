@@ -1,5 +1,6 @@
 "use client";
 
+import { updateRoutine } from "@/app/actions/routines";
 import { InsertDayExercises } from "@/lib/db/schema/day-exercises";
 import { WorkoutDay } from "@/lib/db/schema/workout-days";
 import { useParams, useRouter } from "next/navigation"; // Import Next.js router
@@ -10,12 +11,11 @@ import StepNavigationButtons from "../../components/StepNavigationButtons";
 import Summary from "../../components/Summary";
 import WorkoutDaySetup from "../../components/WorkoutDaySetup";
 import { weekdays } from "../../constants/weekdays";
-import { getRoutineById } from "@/app/actions/routine";
 
 const EditRoutine = () => {
   const router = useRouter();
   const params = useParams();
-  const routineId = Number(params.routineId);
+  const routineId = Number(params.id);
 
   const [isLoading, setIsLoading] = useState(true);
   const [currentStep, setCurrentStep] = useState<number>(0);
@@ -38,25 +38,27 @@ const EditRoutine = () => {
     },
   });
 
-  // useEffect(() => {
-  //   const loadRoutineData = async () => {
-  //     try {
-  //       setIsLoading(true);
-  //       const routine = await getRoutineById(routineId);
+  useEffect(() => {
+    const loadRoutineData = async () => {
+      setIsLoading(true);
+      try {
+        const routineDetails = await fetch("/api/routines/" + routineId)
+          .then((res) => res.json())
+          .finally(() => setLoading(false));
 
-  //       // Populate state with existing routine data
-  //       setRoutineName(routine.name);
-  //       setExercisesByDay(routine.exercises);
-  //     } catch (error) {
-  //       console.error("Failed to load routine", error);
-  //       router.push("/");
-  //     } finally {
-  //       setIsLoading(false);
-  //     }
-  //   };
+        // Populate state with existing routine data
+        setRoutineName(routineDetails.name);
+        setExercisesByDay(routineDetails.workoutDays);
+      } catch (error) {
+        console.error("Failed to load routine", error);
+        router.push("/");
+      } finally {
+        setIsLoading(false);
+      }
+    };
 
-  //   loadRoutineData();
-  // }, [router, routineId]);
+    loadRoutineData();
+  }, [router, routineId]);
 
   const sortSelectedDays = (selectedDays: string[]) => {
     return selectedDays.sort(
@@ -127,7 +129,7 @@ const EditRoutine = () => {
   };
 
   if (isLoading) {
-    return <div>Loading...</div>; // Or a proper loading component
+    return <div>Loading...{routineId}</div>; // Or a proper loading component
   }
 
   return (

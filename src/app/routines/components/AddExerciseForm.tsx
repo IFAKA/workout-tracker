@@ -78,7 +78,7 @@ const AddExerciseForm: React.FC<AddExerciseFormProps> = ({
       if (value === "" || /^[0-9\b]+$/.test(value)) {
         // Remove leading zeros
         value = value.replace(/^0+/, "");
-        setter(value);
+        setter(+value);
       }
     };
 

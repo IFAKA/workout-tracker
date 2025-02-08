@@ -223,3 +223,52 @@ export async function updateRoutineExercises({
 
   return routine;
 }
+
+export async function updateRoutine({
+  id,
+  routineName,
+  exercisesByDay,
+}: {
+  id: number;
+  routineName: string;
+  exercisesByDay: Record<WorkoutDay, InsertDayExercises[]>;
+}) {
+  const routine = await getRoutineById(id);
+
+  if (!routine) {
+    throw new Error("Routine not found or does not belong to the user");
+  }
+
+  await db
+    .update(routines)
+    .set({ name: routineName })
+    .where(eq(routines.id, id));
+
+  const workoutDayList = await getWorkoutDays(id);
+  await insertOrUpdateExercises(workoutDayList, exercisesByDay);
+
+  return routine;
+}
+
+export async function getRoutineDetails(routineId: number) {
+  const routine = await getRoutineById(routineId);
+  if (!routine) {
+    throw new Error("Routine not found or does not belong to the user");
+  }
+
+  const workoutDays = await getWorkoutDays(routineId);
+  const exercises = await getExistingExercises(workoutDays);
+
+  const workoutDaysWithExercises = workoutDays.reduce((acc, day) => {
+    acc[day.dayId] = exercises.filter(
+      (exercise) => exercise.workoutDayId === day.id
+    );
+    return acc;
+  }, {} as Record<WorkoutDay, SelectDayExercises[]>);
+
+  return {
+    id: routine.id,
+    name: routine.name,
+    workoutDays: workoutDaysWithExercises,
+  };
+}

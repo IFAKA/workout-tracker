@@ -1,7 +1,7 @@
-import { SelectExercises } from "@/lib/db/schema/exercises";
+import { SelectDayExercises } from "@/lib/db/schema/day-exercises";
 
 type ExerciseItemProps = {
-  exercise: SelectExercises;
+  exercise: SelectDayExercises;
 };
 
 export function ExerciseItem({ exercise }: ExerciseItemProps) {
