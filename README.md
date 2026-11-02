@@ -60,3 +60,11 @@ its removing all the exercise for that day except the one that you modify
 [ ] Delete
 [ ] Select routine
 [ ] Track progress
+
+---
+
+## Support
+
+If this project is useful to you, you can support my work:
+
+[![Support me on Ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/zfaka)
